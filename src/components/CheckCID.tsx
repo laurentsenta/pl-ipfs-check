@@ -1,3 +1,10 @@
+import {
+  DEFAULT_BACKEND_URL,
+  fetchCIDLogs,
+  IParams,
+  IResult,
+  isValidParams,
+} from "data";
 import isEmpty from "lodash-es/isEmpty";
 import omitBy from "lodash-es/omitBy";
 import {
@@ -9,86 +16,8 @@ import {
   useState,
 } from "react";
 import { useMutation } from "react-query";
-import { useLinkClickHandler, useSearchParams } from "react-router-dom";
-
-const DEFAULT_BACKEND_URL = process.env.REACT_APP_DEFAULT_BACKEND_URL;
-
-interface IParams {
-  backend: string;
-  cid: string;
-  addr: string;
-}
-
-interface IResult {
-  ConnectionError: string;
-  PeerFoundInDHT: { [key: string]: number };
-  CidInDHT: boolean;
-  DataAvailableOverBitswap: {
-    Duration: number;
-    Found: boolean;
-    Responded: boolean;
-    Error: string;
-  };
-}
-
-const isValidParams = (params: Partial<IParams>): params is IParams => {
-  // To be expanded
-  if (!params.addr || !params.backend || !params.cid) {
-    return false;
-  }
-  return true;
-};
-
-const fetchCIDLogs = async (params: IParams): Promise<IResult> => {
-  const queryString = `multiaddr=${params.addr}&cid=${params.cid}`;
-
-  const url = `${params.backend}?${queryString}`;
-
-  const r = await fetch(url, {
-    method: "POST",
-    headers: {},
-  });
-
-  if (r.ok) {
-    return r.json();
-  }
-
-  throw await r.text();
-};
-
-const Message: React.FC<{
-  title: string;
-  content?: string;
-  failure?: true;
-  success?: true;
-}> = ({ title, content, children, success }) => {
-  const status = success ? "is-success" : "is-error";
-
-  const [expanded, setExpanded] = useState(false);
-
-  const toggle = useCallback(() => {
-    setExpanded((x) => !x);
-  }, [setExpanded]);
-
-  const hasMore = content || children;
-
-  return (
-    <>
-      <article className={`notification ${status}`}>
-        <div className="header">
-          <p>{title}</p>
-          {hasMore && <a onClick={toggle}>Details</a>}
-        </div>
-        {expanded && hasMore && (
-          <div className="body">
-            {content}
-            {children}
-          </div>
-        )}
-      </article>
-    </>
-  );
-};
+import { useSearchParams } from "react-router-dom";
+import { Message } from "./Message";
 
 const Result: React.FC<{ data: IResult }> = ({ data }) => {
   return (
@@ -141,7 +70,7 @@ const Result: React.FC<{ data: IResult }> = ({ data }) => {
 export const CheckCID: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const s = (key: string, initial: string = "") => {
+  const s = (key: string, initial: string = ""): string => {
     const value = searchParams.get(key);
     return value ? value : initial;
   };
@@ -149,10 +78,14 @@ export const CheckCID: React.FC = () => {
   const [addr, setAddr] = useState(s("addr"));
   const [cid, setCID] = useState(s("cid"));
   const [backend, setBackend] = useState(s("backend", DEFAULT_BACKEND_URL));
+
   const params = useMemo(
     () => omitBy({ addr, backend, cid }, isEmpty) as Partial<IParams>,
     [addr, backend, cid]
   );
+
+  const mutation = useMutation(fetchCIDLogs);
+  const canSubmit = isValidParams(params) && !mutation.isLoading;
 
   const onChangeAddr: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -176,11 +109,8 @@ export const CheckCID: React.FC = () => {
   );
 
   useEffect(() => {
-    // TODO: this effect is likely to run too often
     setSearchParams(params);
   }, [setSearchParams, params]);
-
-  const mutation = useMutation(fetchCIDLogs);
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
@@ -192,8 +122,6 @@ export const CheckCID: React.FC = () => {
     },
     [mutation, params]
   );
-
-  const canSubmit = isValidParams(params) && !mutation.isLoading;
 
   return (
     <div className="block p-4">
@@ -240,7 +168,7 @@ export const CheckCID: React.FC = () => {
               type="submit"
               disabled={!canSubmit}
             >
-              Run Test
+              {mutation.isLoading ? "Loading..." : "Run Test"}
             </button>
           </div>
           <div className="control">
@@ -248,16 +176,12 @@ export const CheckCID: React.FC = () => {
           </div>
         </div>
       </form>
-
       {mutation.error && (
-        <>
-          <article className="message is-danger">
-            <div className="message-header">
-              <p>The request failed</p>
-            </div>
-            <div className="message-body">{`${mutation.error}`}</div>
-          </article>
-        </>
+        <Message
+          failure
+          title="The request failed"
+          content={`${mutation.error}`}
+        />
       )}
       {mutation.data && <Result data={mutation.data} />}
     </div>

@@ -4,9 +4,8 @@ import { Outlet, Route, Routes } from "react-router-dom";
 
 const CheckCIDPage: React.FC = () => {
   return (
-    <div className="columns">
-      <div className="column is-on-third">Do something</div>
-      <div className="column">
+    <div className="columns is-centered">
+      <div className="column is-half">
         <CheckCID />
       </div>
     </div>
