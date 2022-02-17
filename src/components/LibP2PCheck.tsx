@@ -24,7 +24,7 @@ export const IdentifyMyNode: React.FC = () => {
 
   return (
     <div className="block my-4">
-      <h2 className="title is-4">Identify My Node</h2>
+      <h2 className="title is-4">Is my node configured correctly?</h2>
       <div className="box my-4">
         <div className="content">
           <p>Lorem ipsum dolor sit amet.</p>

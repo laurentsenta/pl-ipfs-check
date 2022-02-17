@@ -96,12 +96,18 @@ export const IsMyContentAvailable: React.FC = () => {
 export const IsMyNodeAccessible: React.FC = () => {
   return (
     <>
-      <div className="box columns my-4">
-        <div className="column">
-          <h2>Is my node accessible?</h2>
-        </div>
-        <div className="column">
-          <h2>Result</h2>
+      <div className="block my-4">
+        <h2 className="title is-4">Is my node accessible?</h2>
+
+        <div className="box columns my-4">
+          <div className="column">
+            <div className="content">
+              <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+          </div>
+          <div className="column">
+            <h2>Result</h2>
+          </div>
         </div>
       </div>
     </>
@@ -111,12 +117,18 @@ export const IsMyNodeAccessible: React.FC = () => {
 export const IsMyNodeServingContent: React.FC = () => {
   return (
     <>
-      <div className="box columns my-4">
-        <div className="column">
-          <h2>Is my node serving content?</h2>
-        </div>
-        <div className="column">
-          <h2>Result</h2>
+      <div className="block my-4">
+        <h2 className="title is-4">Is my node serving content?</h2>
+
+        <div className="box columns my-4">
+          <div className="column">
+            <div className="content">
+              <p>Lorem ipsum dolor sit amet.</p>
+            </div>
+          </div>
+          <div className="column">
+            <h2>Result</h2>
+          </div>
         </div>
       </div>
     </>
