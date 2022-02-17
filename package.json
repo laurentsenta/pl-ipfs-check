@@ -51,5 +51,10 @@
     "husky": "^7.0.4",
     "prettier": "^2.5.1",
     "pretty-quick": "^3.1.3"
-  }
+  },
+  "description": "Lindsay",
+  "main": "index.js",
+  "repository": "git@github.com:laurentsenta/pl-ipfs-check.git",
+  "author": "Lindsay jo Walker <lindsayjowalker@lindsays-mbp.lan>",
+  "license": "MIT"
 }
