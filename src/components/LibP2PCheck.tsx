@@ -1,58 +1,23 @@
-import { DEFAULT_BACKEND_URL, fetchNodeIdentify, IParamsAddr } from "data";
-import { isEmpty, omitBy } from "lodash-es";
-import {
-  ChangeEventHandler,
-  FormEventHandler,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { fetchNodeIdentify, isValidAddrParams } from "data";
+import { useCommonParams } from "data/useCommonParams";
+import { FormEventHandler, useCallback } from "react";
 import { useMutation } from "react-query";
-import { useSearchParams } from "react-router-dom";
 import { Message } from "./Message";
 
 export const IdentifyMyNode: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const s = (key: string, initial: string = ""): string => {
-    const value = searchParams.get(key);
-    return value ? value : initial;
-  };
-
-  const [addr, setAddr] = useState(s("addr"));
-  const [backend, setBackend] = useState(s("backend", DEFAULT_BACKEND_URL));
-
-  const params = useMemo(
-    () => omitBy({ addr, backend }, isEmpty) as Partial<IParamsAddr>,
-    [addr, backend]
-  );
+  const { params, onChangeAddr, onChangeBackend } = useCommonParams();
+  const { addr, backend } = params;
 
   const mutation = useMutation(fetchNodeIdentify);
-  const canSubmit = true; // isValidParams(params) && !mutation.isLoading;
-
-  const onChangeAddr: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      setAddr(e.target.value);
-    },
-    [setAddr]
-  );
-
-  const onChangeBackend: ChangeEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      setBackend(e.target.value);
-    },
-    [setBackend]
-  );
-
-  useEffect(() => {
-    setSearchParams(params);
-  }, [setSearchParams, params]);
+  const canSubmit = isValidAddrParams(params) && !mutation.isLoading;
 
   const onSubmit: FormEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       e.preventDefault();
-      mutation.mutate(params as any); // TODO: fix
+
+      if (isValidAddrParams(params)) {
+        mutation.mutate(params);
+      }
     },
     [mutation, params]
   );

@@ -10,6 +10,10 @@ export interface IParamsAddr {
   backend: string;
   addr: string;
 }
+export interface IParamsCID {
+  backend: string;
+  cid: string;
+}
 
 export interface IResult {
   ConnectionError: string;
@@ -33,12 +37,32 @@ export const isValidParams = (
   return true;
 };
 
+export const isValidAddrParams = (
+  params: Partial<IParamsAddrAndCID>
+): params is IParamsAddr => {
+  // To be expanded
+  if (!params.addr || !params.backend) {
+    return false;
+  }
+  return true;
+};
+
+export const isValidCIDParams = (
+  params: Partial<IParamsCID>
+): params is IParamsCID => {
+  // To be expanded
+  if (!params.cid || !params.backend) {
+    return false;
+  }
+  return true;
+};
+
 export const fetchCIDLogs = async (
   params: IParamsAddrAndCID
 ): Promise<IResult> => {
-  const queryString = `multiaddr=${params.addr}&cid=${params.cid}`;
+  const queryString = `addr=${params.addr}&cid=${params.cid}`;
 
-  const url = `${params.backend}?${queryString}`;
+  const url = `${params.backend}/find?${queryString}`;
 
   const r = await fetch(url, {
     method: "POST",
@@ -68,6 +92,25 @@ export const fetchNodeIdentify = async (
   const queryString = `addr=${params.addr}`;
 
   const url = `${params.backend}/identify?${queryString}`;
+
+  const r = await fetch(url, {
+    method: "GET",
+    headers: {},
+  });
+
+  if (r.ok) {
+    return r.json();
+  }
+
+  throw await r.text();
+};
+
+export const fetchCIDIsBeingServed = async (
+  params: IParamsCID
+): Promise<IIdentify> => {
+  const queryString = `cid=${params.cid}`;
+
+  const url = `${params.backend}/find-cid?${queryString}`;
 
   const r = await fetch(url, {
     method: "GET",
