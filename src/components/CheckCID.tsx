@@ -73,9 +73,6 @@ export const CheckCID: React.FC = () => {
                 {mutation.isLoading ? "Loading..." : "Run Test"}
               </button>
             </div>
-            <div className="control">
-              <button className="button is-link is-light">Clear</button>
-            </div>
           </div>
         </form>
       </div>
