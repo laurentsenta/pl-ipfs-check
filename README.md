@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Dependencies
+* Make sure you have [NodeJS](https://nodejs.org/en/) installed on your machine
+* Once NodeJS is installed, install [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable) using `npm install --global yarn`, then check the install with `yarn --version`.
+
 ## Available Scripts
 
 In the project directory, you can run:
