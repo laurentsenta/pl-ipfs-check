@@ -27,7 +27,7 @@ export const Message: React.FC<{
           {hasMore && <a onClick={toggle}>Details</a>}
         </div>
         {expanded && hasMore && (
-          <div className="body">
+          <div className="body" style={{ overflow: "scroll" }}>
             {content}
             {children}
           </div>

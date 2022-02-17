@@ -1,11 +1,21 @@
 import { CheckCID } from "components/CheckCID";
+import {
+  IsMyContentAvailable,
+  IsMyNodeAccessible,
+  IsMyNodeServingContent,
+} from "components/IPFSCheck";
+import { IdentifyMyNode } from "components/LibP2PCheck";
 import React from "react";
 import { Outlet, Route, Routes } from "react-router-dom";
 
 const CheckCIDPage: React.FC = () => {
   return (
     <div className="columns is-centered">
-      <div className="column is-half">
+      <div className="column is-10">
+        <IsMyContentAvailable />
+        <IsMyNodeAccessible />
+        <IsMyNodeServingContent />
+        <IdentifyMyNode />
         <CheckCID />
       </div>
     </div>

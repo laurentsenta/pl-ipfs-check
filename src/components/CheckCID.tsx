@@ -1,7 +1,7 @@
 import {
   DEFAULT_BACKEND_URL,
   fetchCIDLogs,
-  IParams,
+  IParamsAddrAndCID,
   IResult,
   isValidParams,
 } from "data";
@@ -80,7 +80,7 @@ export const CheckCID: React.FC = () => {
   const [backend, setBackend] = useState(s("backend", DEFAULT_BACKEND_URL));
 
   const params = useMemo(
-    () => omitBy({ addr, backend, cid }, isEmpty) as Partial<IParams>,
+    () => omitBy({ addr, backend, cid }, isEmpty) as Partial<IParamsAddrAndCID>,
     [addr, backend, cid]
   );
 
