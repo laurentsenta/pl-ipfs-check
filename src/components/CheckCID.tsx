@@ -125,65 +125,69 @@ export const CheckCID: React.FC = () => {
 
   return (
     <div className="block p-4">
-      <form onSubmit={onSubmit}>
-        <div className="field">
-          <label className="label">Multiaddr</label>
-          <div className="control">
-            <input
-              className="input"
-              type="text"
-              placeholder="/p2p/Qm..."
-              value={addr}
-              onChange={onChangeAddr}
-            />
+      <div className="block">
+        <form onSubmit={onSubmit}>
+          <div className="field">
+            <label className="label">Multiaddr</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                placeholder="/p2p/Qm..."
+                value={addr}
+                onChange={onChangeAddr}
+              />
+            </div>
           </div>
-        </div>
-        <div className="field">
-          <label className="label">CID</label>
-          <div className="control">
-            <input
-              className="input"
-              type="text"
-              placeholder="QmData..."
-              value={cid}
-              onChange={onChangeCID}
-            />
+          <div className="field">
+            <label className="label">CID</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                placeholder="QmData..."
+                value={cid}
+                onChange={onChangeCID}
+              />
+            </div>
           </div>
-        </div>
-        <div className="field">
-          <label className="label">Backend URL</label>
-          <div className="control">
-            <input
-              className="input"
-              type="text"
-              value={backend}
-              onChange={onChangeBackend}
-            />
+          <div className="field">
+            <label className="label">Backend URL</label>
+            <div className="control">
+              <input
+                className="input"
+                type="text"
+                value={backend}
+                onChange={onChangeBackend}
+              />
+            </div>
           </div>
-        </div>
-        <div className="field is-grouped">
-          <div className="control">
-            <button
-              className="button is-link"
-              type="submit"
-              disabled={!canSubmit}
-            >
-              {mutation.isLoading ? "Loading..." : "Run Test"}
-            </button>
+          <div className="field is-grouped">
+            <div className="control">
+              <button
+                className="button is-link"
+                type="submit"
+                disabled={!canSubmit}
+              >
+                {mutation.isLoading ? "Loading..." : "Run Test"}
+              </button>
+            </div>
+            <div className="control">
+              <button className="button is-link is-light">Clear</button>
+            </div>
           </div>
-          <div className="control">
-            <button className="button is-link is-light">Clear</button>
-          </div>
-        </div>
-      </form>
-      {mutation.error && (
-        <Message
-          failure
-          title="The request failed"
-          content={`${mutation.error}`}
-        />
-      )}
-      {mutation.data && <Result data={mutation.data} />}
+        </form>
+      </div>
+      <div className="block">
+        {mutation.error && (
+          <Message
+            failure
+            title="The request failed"
+            content={`${mutation.error}`}
+          />
+        )}
+        {mutation.data && <Result data={mutation.data} />}
+      </div>
     </div>
   );
 };

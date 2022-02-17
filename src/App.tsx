@@ -1,42 +1,17 @@
-import { CheckCID } from "components/CheckCID";
-import {
-  IsMyContentAvailable,
-  IsMyNodeAccessible,
-  IsMyNodeServingContent,
-} from "components/IPFSCheck";
-import { IdentifyMyNode } from "components/LibP2PCheck";
+import { DiagnosePage } from "pages/DiagnosePage";
+import { IPFSCheckPage } from "pages/IPFSCheckPage";
+import { PageContainer } from "pages/PageContainer";
+import { ToolboxPage } from "pages/ToolboxPage";
 import React from "react";
-import { Outlet, Route, Routes } from "react-router-dom";
-
-const CheckCIDPage: React.FC = () => {
-  return (
-    <div className="columns is-centered">
-      <div className="column is-10">
-        <IsMyContentAvailable />
-        <IsMyNodeAccessible />
-        <IsMyNodeServingContent />
-        <IdentifyMyNode />
-        <CheckCID />
-      </div>
-    </div>
-  );
-};
-
-const PageContainer: React.FC = ({ children }) => {
-  return (
-    <div className="main">
-      <Outlet />
-    </div>
-  );
-};
+import { Link, Route, Routes } from "react-router-dom";
 
 const PageHeader: React.FC = () => {
   return (
     <div className="navbar">
       <div className="navbar-brand">
-        <a className="navbar-item" href="https://bulma.io">
-          IPFS Check
-        </a>
+        <Link className="navbar-item" to="/">
+          PL Diagnose
+        </Link>
         <a
           href="#"
           role="button"
@@ -49,6 +24,17 @@ const PageHeader: React.FC = () => {
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
+      </div>
+      <div className="navbar-start">
+        <Link className="navbar-item" to="/">
+          IPFS Check
+        </Link>
+        <Link className="navbar-item" to="/diagnose">
+          Diagnose
+        </Link>
+        <Link className="navbar-item" to="/toolbox">
+          Toolbox
+        </Link>
       </div>
     </div>
   );
@@ -64,12 +50,9 @@ function App() {
       <PageHeader />
       <Routes>
         <Route path="/" element={<PageContainer />}>
-          <Route index element={<CheckCIDPage />} />
-          {/* <Route path="teams" element={<Teams />}>
-              <Route path=":teamId" element={<Team />} />
-              <Route path="new" element={<NewTeamForm />} />
-              <Route index element={<LeagueStandings />} />
-            </Route> */}
+          <Route index element={<IPFSCheckPage />} />
+          <Route path="/toolbox" element={<ToolboxPage />} />
+          <Route path="/diagnose" element={<DiagnosePage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

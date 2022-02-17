@@ -60,9 +60,9 @@ export const isValidCIDParams = (
 export const fetchCIDLogs = async (
   params: IParamsAddrAndCID
 ): Promise<IResult> => {
-  const queryString = `addr=${params.addr}&cid=${params.cid}`;
+  const queryString = `multiaddr=${params.addr}&cid=${params.cid}`;
 
-  const url = `${params.backend}/find?${queryString}`;
+  const url = `${params.backend}?${queryString}`;
 
   const r = await fetch(url, {
     method: "POST",
