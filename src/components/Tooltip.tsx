@@ -12,7 +12,7 @@ export const Tooltip: React.FC<{ message: string }> = ({ message }) => {
 export const TooltipMultiaddr: React.FC = () => {
   return (
     <Tooltip
-      message="The multiaddress is the&#10;location of your node, created by combining&#10;the string `/libp2p/` with the PeerID"
+      message="The multiaddress is the&#10;location of your node, created by combining&#10;the string `/xp2p/` with the PeerID"
     />
   );
 };
