@@ -5,6 +5,8 @@ import { FormEventHandler, useCallback } from "react";
 import { useMutation } from "react-query";
 import { Message } from "./Message";
 import { TooltipMultiaddr } from "./Tooltip";
+import { TooltipCID } from "./Tooltip";
+import { TooltipBackend } from "./Tooltip";
 
 export const CheckCID: React.FC = () => {
   const { params, onChangeCID, onChangeBackend, onChangeAddr } =
@@ -44,7 +46,9 @@ export const CheckCID: React.FC = () => {
             </div>
           </div>
           <div className="field">
-            <label className="label">CID</label>
+            <label className="label">
+              CID <TooltipCID />
+            </label>
             <div className="control">
               <input
                 className="input"
@@ -56,7 +60,9 @@ export const CheckCID: React.FC = () => {
             </div>
           </div>
           <div className="field">
-            <label className="label">Backend URL</label>
+            <label className="label">
+              Backend URL <TooltipBackend />
+            </label>
             <div className="control">
               <input
                 className="input"
