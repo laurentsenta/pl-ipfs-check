@@ -4,6 +4,7 @@ import isEmpty from "lodash-es/isEmpty";
 import { FormEventHandler, useCallback } from "react";
 import { useMutation } from "react-query";
 import { Message } from "./Message";
+import { TooltipMultiaddr } from "./Tooltip";
 
 export const CheckCID: React.FC = () => {
   const { params, onChangeCID, onChangeBackend, onChangeAddr } =
@@ -30,10 +31,7 @@ export const CheckCID: React.FC = () => {
         <form onSubmit={onSubmit}>
           <div className="field">
             <label className="label">
-              Multiaddr
-              <span className="icon">
-                ?{/* <i className="fas fa-info-circle"></i> */}
-              </span>
+              Multiaddr <TooltipMultiaddr />
             </label>
             <div className="control">
               <input
