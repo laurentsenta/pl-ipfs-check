@@ -29,7 +29,12 @@ export const CheckCID: React.FC = () => {
       <div className="block">
         <form onSubmit={onSubmit}>
           <div className="field">
-            <label className="label">Multiaddr</label>
+            <label className="label">
+              Multiaddr
+              <span className="icon">
+                ?{/* <i className="fas fa-info-circle"></i> */}
+              </span>
+            </label>
             <div className="control">
               <input
                 className="input"

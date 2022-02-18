@@ -123,3 +123,24 @@ export const fetchCIDIsBeingServed = async (
 
   throw await r.text();
 };
+
+interface IFoundPeer {}
+
+export const fetchPeerIDIsFound = async (
+  params: IParamsAddr
+): Promise<IFoundPeer> => {
+  const queryString = `addr=${params.addr}`;
+
+  const url = `${params.backend}/find-peer?${queryString}`;
+
+  const r = await fetch(url, {
+    method: "GET",
+    headers: {},
+  });
+
+  if (r.ok) {
+    return r.json();
+  }
+
+  throw await r.text();
+};
