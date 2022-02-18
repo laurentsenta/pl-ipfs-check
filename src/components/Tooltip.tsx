@@ -16,3 +16,19 @@ export const TooltipMultiaddr: React.FC = () => {
     />
   );
 };
+
+export const TooltipCID: React.FC = () => {
+  return (
+    <Tooltip
+      message="This is the Content Identifier&#10;for a piece of content&#10;that is pinned by a node in IPFS"
+    />
+  );
+};
+
+export const TooltipBackend: React.FC = () => {
+  return (
+    <Tooltip
+      message="This is the a third party URL that you&#10;would like to check a node or piece of content against.&#10;You can use https://ipfs-check-backend.ipfs.io/"
+    />
+  );
+};
