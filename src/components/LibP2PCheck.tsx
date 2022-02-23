@@ -27,7 +27,9 @@ export const IdentifyMyNode: React.FC = () => {
       <h2 className="title is-4">Is my node configured correctly?</h2>
       <div className="box my-4">
         <div className="content">
-          <p>Lorem ipsum dolor sit amet.</p>
+          <p>
+            Check to see if a third party Backend URl can access a Multiaddress
+          </p>
         </div>
         <div className="columns">
           <div className="column is-5">
@@ -65,23 +67,26 @@ export const IdentifyMyNode: React.FC = () => {
                     {mutation.isLoading ? "Loading..." : "Run Test"}
                   </button>
                 </div>
+                <div>
+                  <h2>Result:</h2>
+                  {mutation.error && (
+                    <Message
+                      failure
+                      title="The request failed"
+                      content={`${mutation.error}`}
+                    />
+                  )}
+                  {mutation.data && (
+                    <Message success title="Success">
+                      <pre>{JSON.stringify(mutation.data, undefined, 2)}</pre>
+                    </Message>
+                  )}
+                </div>
               </div>
             </form>
           </div>
           <div className="column is-7">
-            <h3 className="title is-4">Result:</h3>
-            {mutation.error && (
-              <Message
-                failure
-                title="The request failed"
-                content={`${mutation.error}`}
-              />
-            )}
-            {mutation.data && (
-              <Message success title="Success">
-                <pre>{JSON.stringify(mutation.data, undefined, 2)}</pre>
-              </Message>
-            )}
+            <h3 className="title is-4">Troubleshooting Steps:</h3>
           </div>
         </div>
       </div>
