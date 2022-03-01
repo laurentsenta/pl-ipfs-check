@@ -1,3 +1,4 @@
+import { CommonParamsProvider } from "data/useCommonParams";
 import React from "react";
 import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -12,7 +13,9 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <HashRouter>
-        <App />
+        <CommonParamsProvider>
+          <App />
+        </CommonParamsProvider>
       </HashRouter>
     </QueryClientProvider>
   </React.StrictMode>,

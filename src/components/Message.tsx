@@ -5,7 +5,8 @@ export const Message: React.FC<{
   content?: string;
   failure?: true;
   success?: true;
-}> = ({ title, content, children, success }) => {
+  rawData?: unknown;
+}> = ({ title, content, children, success, rawData }) => {
   const status = success ? "is-success" : "is-warning";
   const prefix = success ? "✔" : "❌";
 
@@ -24,9 +25,12 @@ export const Message: React.FC<{
           <p>
             {prefix} {title}
           </p>
-          {hasMore && <a onClick={toggle}>Details</a>}
+          {!!rawData && <a onClick={toggle}>Details</a>}
         </div>
-        {expanded && hasMore && (
+        {expanded && rawData && (
+          <pre>{JSON.stringify(rawData, undefined, 2)}</pre>
+        )}
+        {hasMore && (
           <div className="body" style={{ overflow: "scroll" }}>
             {content}
             {children}

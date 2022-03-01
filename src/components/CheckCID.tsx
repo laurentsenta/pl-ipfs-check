@@ -11,7 +11,6 @@ import { TooltipBackend } from "./Tooltip";
 export const CheckCID: React.FC = () => {
   const { params, onChangeCID, onChangeBackend, onChangeAddr } =
     useCommonParams();
-  const { cid, backend, addr } = params;
 
   const mutation = useMutation(fetchCIDLogs);
   const canSubmit = isValidParams(params) && !mutation.isLoading;
@@ -26,6 +25,8 @@ export const CheckCID: React.FC = () => {
     },
     [mutation, params]
   );
+
+  const { addr, cid, backend } = params;
 
   return (
     <div className="block p-4">
