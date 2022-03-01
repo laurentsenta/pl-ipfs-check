@@ -1,9 +1,7 @@
 import { AddrField, BackendURLField, CIDField } from "components/CommonFields";
-import {
-  IsMyContentAvailableInline,
-  IsMyNodeAccessibleInline,
-  IsMyNodeServingContentInline,
-} from "components/IPFSCheck";
+import { IsMyNodeServingContentInline } from "components/IPFSCheck";
+import { IsMyContentAvailableInline } from "components/IsMyContentAvailableInline";
+import { IsMyNodeAccessibleInline } from "components/IsMyNodeAccessibleInline";
 
 export const DiagnoseAccessContentPage: React.FC = () => {
   return (
