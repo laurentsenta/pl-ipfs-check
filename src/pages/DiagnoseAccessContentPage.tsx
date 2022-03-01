@@ -1,7 +1,35 @@
 import { AddrField, BackendURLField, CIDField } from "components/CommonFields";
-import { IsMyNodeServingContentInline } from "components/IPFSCheck";
 import { IsMyContentAvailableInline } from "components/IsMyContentAvailableInline";
 import { IsMyNodeAccessibleInline } from "components/IsMyNodeAccessibleInline";
+import { IsMyNodeServingContentInline } from "components/IsMyNodeServingContentInline";
+import { useCallback, useState } from "react";
+
+export const ButtonWithModal: React.FC<{ title: string }> = ({
+  title,
+  children,
+}) => {
+  const [show, setShow] = useState(false);
+  const toggle = useCallback(() => setShow((x) => !x), [setShow]);
+
+  return (
+    <>
+      <button className="button outline" onClick={toggle}>
+        {title}
+      </button>
+      <div className={`modal ${show ? "is-active" : ""}`}>
+        <div className="modal-background" onClick={toggle}></div>
+        <div className="modal-content">
+          <div className="box">{children}</div>
+        </div>
+        <button
+          className="modal-close is-large"
+          aria-label="close"
+          onClick={toggle}
+        ></button>
+      </div>
+    </>
+  );
+};
 
 export const DiagnoseAccessContentPage: React.FC = () => {
   return (
@@ -55,6 +83,62 @@ export const DiagnoseAccessContentPage: React.FC = () => {
             Enter your node's address below, hopefully the backend will be able
             to reach out to it.
           </p>
+          <ButtonWithModal title="Where do I find my multiaddr?">
+            <section className="content">
+              <h2 className="">Where do I find my multiaddr?</h2>
+              <ul>
+                <li className="">
+                  <strong>Using This tool</strong>
+                  <ul>
+                    <li>
+                      Run the "Is my content on the DHT?" test and click on any
+                      of the provider's addresses
+                    </li>
+                    <li>
+                      Run the "Is my node accessible?" test and click on any of
+                      the node advertised addresses
+                    </li>
+                  </ul>
+                  <strong>Using IPFS Desktop or IPFS WebUI</strong>
+                  <ul>
+                    <li>
+                      Open the IPFS WebUI "Status" page via the IPFS Desktop
+                      menu or by visiting "http://127.0.0.1:5001/webui" (when
+                      using the default config settings)
+                    </li>
+                    <li>
+                      If you want to test your peerID rather than a particular
+                      address enter{" "}
+                      <code>
+                        /p2p/{"{"}YourPeerID{"}"}
+                      </code>
+                    </li>
+                    <li>
+                      If you want to test a particular address then click the
+                      "Advanced" dropdown to see the node's addresses
+                    </li>
+                  </ul>
+                </li>
+                <li className="">
+                  <strong>Using the go-ipfs CLI</strong>
+                  <ul>
+                    <li>
+                      If you want to test your peerID rather than a particular
+                      address run <code>ipfs id</code> and enter{" "}
+                      <code>
+                        /p2p/{"{"}YourPeerID{"}"}
+                      </code>
+                    </li>
+                    <li>
+                      If you want to test a particular address then choose an
+                      entry from the list of addresses output by{" "}
+                      <code>ipfs id</code>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </section>
+          </ButtonWithModal>
         </div>
         <div className="" style={{ maxWidth: "600px" }}>
           <AddrField />
