@@ -1,40 +1,63 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import { ButtonWithModal } from "components/ButtonWithModal";
 import { AddrField, BackendURLField, CIDField } from "components/CommonFields";
 import { IsMyContentAvailableInline } from "components/IsMyContentAvailableInline";
 import { IsMyNodeAccessibleInline } from "components/IsMyNodeAccessibleInline";
 import { IsMyNodeServingContentInline } from "components/IsMyNodeServingContentInline";
-import { useCallback, useState } from "react";
+import last from "lodash-es/last";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-export const ButtonWithModal: React.FC<{ title: string }> = ({
-  title,
-  children,
-}) => {
-  const [show, setShow] = useState(false);
-  const toggle = useCallback(() => setShow((x) => !x), [setShow]);
+const useScrollPosition = () => {
+  const [y, setY] = useState(0);
+  const handleScroll = () => {
+    const position = window.pageYOffset;
+    setY(position);
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  return y;
+};
+
+const TitleWithRef: React.FC<{
+  setRef: (id: number, e: HTMLElement | null) => void;
+  id: number;
+  className: string;
+}> = ({ setRef, id, children, ...props }) => {
+  const cb = useCallback(
+    (e: HTMLElement | null) => {
+      setRef(id, e);
+    },
+    [setRef, id]
+  );
 
   return (
-    <>
-      <button className="button outline" onClick={toggle}>
-        {title}
-      </button>
-      <div className={`modal ${show ? "is-active" : ""}`}>
-        <div className="modal-background" onClick={toggle}></div>
-        <div className="modal-content">
-          <div className="box">{children}</div>
-        </div>
-        <button
-          className="modal-close is-large"
-          aria-label="close"
-          onClick={toggle}
-        ></button>
-      </div>
-    </>
+    <h1 ref={cb} {...props}>
+      {children}
+    </h1>
   );
 };
 
-export const DiagnoseAccessContentPage: React.FC = () => {
+const Content: React.FC<{
+  setRef: (id: number, e: HTMLElement | null) => void;
+}> = ({ setRef }) => {
   return (
     <>
-      <h1 className="title">I can't access my content</h1>
+      <section className="hero">
+        <div className="hero-body">
+          <h1 className="title is-size-1">I can't access my content</h1>
+          <p className="subtitle">
+            Diagnose issues with your libp2p / ipfs stack.
+          </p>
+        </div>
+      </section>
+
       <div className="block">
         <div className="content">
           Ok, you cannot access your content, sorry about that. Let's try to
@@ -53,7 +76,9 @@ export const DiagnoseAccessContentPage: React.FC = () => {
         </div>
       </div>
       <div className="block">
-        <h1 className="title is-3">1. Is my content on the DHT?</h1>
+        <TitleWithRef className="title is-3" id={1} setRef={setRef}>
+          1. Is my content on the DHT?
+        </TitleWithRef>
         <div className="content">
           <p>
             First we need to make sure your content is accessible on the DHT.
@@ -73,7 +98,9 @@ export const DiagnoseAccessContentPage: React.FC = () => {
         </div>
       </div>
       <div className="block">
-        <h1 className="title is-3">2. Is my node accessible?</h1>
+        <TitleWithRef className="title is-3" id={2} setRef={setRef}>
+          2. Is my node accessible?
+        </TitleWithRef>
         <div className="content">
           <p>
             Now we need to make sure that nodes serving your content can be
@@ -148,7 +175,9 @@ export const DiagnoseAccessContentPage: React.FC = () => {
         </div>
       </div>
       <div className="block">
-        <h1 className="title is-3">3. Is my node serving the content?</h1>
+        <TitleWithRef className="title is-3" id={3} setRef={setRef}>
+          3. Is my node serving the content?
+        </TitleWithRef>
         <div className="content">
           <p>
             If you're node is accessible and the content is advertised on the
@@ -164,5 +193,66 @@ export const DiagnoseAccessContentPage: React.FC = () => {
       </div>
       <></>
     </>
+  );
+};
+
+export const DiagnoseAccessContentPage: React.FC = () => {
+  const [refs, setRefs] = useState<(HTMLElement | null)[]>([]);
+
+  const setRef = useCallback(
+    (id: number, e: HTMLElement | null) => {
+      setRefs((x) => {
+        const next = [...x];
+        next[id] = e;
+        return next;
+      });
+    },
+    [setRefs]
+  );
+
+  const scrollY = useScrollPosition();
+
+  const latestPassedRef = last(
+    refs
+      .map((x, index) => ({ x, index }))
+      .filter(({ x, index }) => {
+        if (!x) {
+          return false;
+        }
+
+        return scrollY > x.offsetTop - 100;
+      })
+  );
+
+  const activeIndex = latestPassedRef ? latestPassedRef.index : undefined;
+
+  return (
+    <div className="columns">
+      <div className="column is-2 sticky-sidebar has-background-white-bis">
+        <aside className="menu">
+          <p className="menu-label">Diagnose</p>
+          <ul className="menu-list">
+            {refs.map((r, index) => {
+              const isActive = index === activeIndex;
+              const onClick = () => r?.scrollIntoView();
+
+              return (
+                <li key={index}>
+                  <a
+                    onClick={onClick}
+                    className={`${isActive ? "is-active" : ""}`}
+                  >
+                    {r?.textContent}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </aside>
+      </div>
+      <div className="column is-6 is-offset-1 py-5">
+        <Content setRef={setRef} />
+      </div>
+    </div>
   );
 };

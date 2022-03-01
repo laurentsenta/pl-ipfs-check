@@ -2,7 +2,7 @@ import { CheckCID } from "components/CheckCID";
 
 export const IPFSCheckPage: React.FC = () => {
   return (
-    <>
+    <div className="container pt-4">
       <h1 className="title">
         Check the retrievability of CID from an IPFS peer
       </h1>
@@ -92,6 +92,6 @@ export const IPFSCheckPage: React.FC = () => {
           </ul>
         </section>
       </div>
-    </>
+    </div>
   );
 };
