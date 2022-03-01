@@ -27,7 +27,8 @@ export const IsMyContentAvailableInline: React.FC = () => {
     mutation.error ||
     mutation.data?.parseCIDError ||
     mutation.data?.findProvidersError;
-  const data = mutation.error ? undefined : mutation.data?.providers;
+
+  const data = error ? undefined : mutation.data?.providers;
 
   return (
     <div className="block">
